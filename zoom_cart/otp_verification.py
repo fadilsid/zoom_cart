@@ -16,7 +16,7 @@ def otp_verification(email):
         otp.otp=rand
         otp.insert()
 
-        content="Dear "+user_doc.first_name+'<br>' +"Your OTP to change password is " + rand
+        content="Dear "+user_doc.first_name+","+'<br>' +"Your OTP to change password is " + rand
         recipient=user_doc.email
         send_email=frappe.sendmail(recipients=[recipient],sender=user_doc.owner,subject="Zoom Cart OTP Verification",content=content)
 
@@ -48,6 +48,34 @@ def password_change(otp,password):
 
     else:
         return "Incorrect OTP"
+
+@frappe.whitelist()
+def signup(email,name,password):
+
+    new_user=frappe.new_doc("User")
+    users=frappe.db.get_all("User")
+
+    for user in users:
+        if user.name==email:
+            return "You have already registered with email {}".format(email)
+
+    new_user.email=email
+    new_user.first_name=name
+    new_user.new_password=password
+
+    new_user.insert()
+    new_user.save()
+
+    return "You have successfully registered with email {}".format(email)
+
+
+
+
+
+    
+
+
+
 
 
 
