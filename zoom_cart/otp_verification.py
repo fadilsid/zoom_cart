@@ -1,9 +1,18 @@
 import frappe
+from frappe.utils import logger
 import random
 from datetime import datetime
 from pytz import timezone
 
-@frappe.whitelist()
+
+
+frappe.utils.logger.set_log_level("DEBUG")
+logger = frappe.logger("zcart", allow_site=True, file_count=50)
+
+@frappe.whitelist(allow_guest=True)
+
+## Generate random otp, save against the email in otp verification doctype
+## otp sent to email
 def otp_verification(email):
     user = frappe.db.get_all('User',fields=['name'],filters={'email':email})
 
@@ -24,7 +33,8 @@ def otp_verification(email):
 
         return "OTP sent successfully"
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
+## verify the otp with user and change password
 def password_change(otp,password):
     otp_doc=frappe.db.get_all("OTP Password Verification",fields=["name"],filters={"otp":otp})
 
@@ -40,7 +50,7 @@ def password_change(otp,password):
             if '1:00:00.000000'>=str(time_diff):
                 user=frappe.get_doc("User",otp_file.user)
                 user.new_password=password
-                user.save()
+                user.save(ignore_permissions=True)
 
                 return "Password Changed Successfully"
             else:
@@ -49,7 +59,7 @@ def password_change(otp,password):
     else:
         return "Incorrect OTP"
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def signup(email,name,password):
 
     new_user=frappe.new_doc("User")
@@ -64,7 +74,9 @@ def signup(email,name,password):
     new_user.new_password=password
 
     new_user.insert()
-    new_user.save()
+    new_user.save(ignore_permissions=True)
+
+    logger.info(f"{email} updated")
 
     return "You have successfully registered with email {}".format(email)
 
