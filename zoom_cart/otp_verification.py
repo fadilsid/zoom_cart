@@ -82,6 +82,8 @@ def signup(email,name,password):
     if default_role:
         user_reg.add_roles(default_role)
 
+        user_reg.save(ignore_permissions=True)
+
     logger.info(f"{email} updated")
 
     return "You have successfully registered with email {}".format(email)
