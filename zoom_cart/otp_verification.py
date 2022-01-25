@@ -76,6 +76,12 @@ def signup(email,name,password):
     new_user.insert()
     new_user.save(ignore_permissions=True)
 
+    user_reg=frappe.get_doc('User',new_user.email)
+
+    default_role = frappe.db.get_value("Portal Settings", None, "default_role")
+    if default_role:
+        user_reg.add_roles(default_role)
+
     logger.info(f"{email} updated")
 
     return "You have successfully registered with email {}".format(email)
