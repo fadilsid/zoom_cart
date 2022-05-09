@@ -60,7 +60,7 @@ def password_change(otp,password):
         return "Incorrect OTP"
 
 @frappe.whitelist(allow_guest=True)
-def signup(email,name,password):
+def signup(email,name,password,redirect_to):
 
     new_user=frappe.new_doc("User")
     users=frappe.db.get_all("User")
@@ -72,13 +72,19 @@ def signup(email,name,password):
     new_user.email=email
     new_user.first_name=name
     new_user.new_password=password
-
+    new_user.send_welcome_email = 0
+    content =  "Congratulations " + new_user.first_name + '<br>' + 'Your account has been successfully created , Click the link below to login ' + redirect_to #storing content for email in content variable 
+    recipient = new_user.email    #storing recipents email in email recipent variable 
+    send_email = frappe.sendmail(recipients=[recipient],subject="Welcome to ZoomCart", content=content ,delayed=False) #sending email
+    frappe.email.doctype.email_queue.email_queue.send_now(send_email)
+    
     new_user.insert()
     new_user.save(ignore_permissions=True)
 
     user_reg=frappe.get_doc('User',new_user.email)
 
     default_role = frappe.db.get_value("Portal Settings", None, "default_role")
+    
     if default_role:
         user_reg.add_roles(default_role)
 
@@ -87,6 +93,7 @@ def signup(email,name,password):
     logger.info(f"{email} updated")
 
     return "You have successfully registered with email {}".format(email)
+
 
 
 
