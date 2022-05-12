@@ -42,7 +42,7 @@ def password_change(otp,password):
         for otp_field in otp_doc:
             otp_file=frappe.get_doc("OTP Password Verification",otp_field['name'])
 
-            bahrain_time=datetime.now(timezone("Asia/Bahrain")).strftime('%Y-%m-%d %H:%M:%S.%f')
+            bahrain_time=datetime.now(timezone("Asia/Bahrain")).strptime('%Y-%m-%d %H:%M:%S.%f')
             cur_time=datetime.now()
             otp_time = str(otp_file.creation)
             otp_time = datetime.strptime(otp_time, '%Y-%m-%d %H:%M:%S.%f')
