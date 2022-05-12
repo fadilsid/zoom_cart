@@ -49,14 +49,14 @@ def password_change(otp,password):
 
             return cur_time , ind_time , ind_time_date , time_diff
 
-            # if '1:00:00.000000'>=str(time_diff):
-            #     user=frappe.get_doc("User",otp_file.user)
-            #     user.new_password=password
-            #     user.save(ignore_permissions=True)
+            if '1:00:00.000000'>=str(time_diff):
+                user=frappe.get_doc("User",otp_file.user)
+                user.new_password=password
+                user.save(ignore_permissions=True)
 
-            #     return "Password Changed Successfully"
-            # else:
-            #     return "Your OTP has expired"
+                return "Password Changed Successfully"
+            else:
+                return "Your OTP has expired"
 
     else:
         return "Incorrect OTP"
