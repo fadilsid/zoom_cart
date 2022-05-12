@@ -27,7 +27,7 @@ def otp_verification(email):
 
         content="Dear "+user_doc.first_name+","+'<br>' +"Your OTP to change password is " + rand
         recipient=user_doc.email
-        send_email=frappe.sendmail(recipients=[recipient],sender=user_doc.owner,subject="Zoom Cart OTP Verification",content=content)
+        send_email=frappe.sendmail(recipients=[recipient],sender=user_doc.owner,subject="Zoom Cart OTP Verification",content=content,delayed = False)
 
         frappe.email.doctype.email_queue.email_queue.send_now(send_email)
 
