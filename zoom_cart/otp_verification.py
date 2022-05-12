@@ -47,7 +47,7 @@ def password_change(otp,password):
             ind_time_date=datetime.strptime(ind_time, '%Y-%m-%d %H:%M:%S.%f')
             time_diff=ind_time_date-otp_file.creation
 
-            return cur_time , ind_time , ind_time_date , time_diff
+            # return cur_time , ind_time , ind_time_date , time_diff
 
             if '1:00:00.000000'>=str(time_diff):
                 user=frappe.get_doc("User",otp_file.user)
