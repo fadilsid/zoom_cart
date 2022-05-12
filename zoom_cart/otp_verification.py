@@ -53,6 +53,7 @@ def password_change(otp,password):
                 user.save(ignore_permissions=True)
 
                 return "Password Changed Successfully"
+                
             else:
                 return "Your OTP has expired"
 
