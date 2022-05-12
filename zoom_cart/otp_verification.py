@@ -46,16 +46,17 @@ def password_change(otp,password):
             cur_time=datetime.now()
             ind_time_date=datetime.strptime(ind_time, '%Y-%m-%d %H:%M:%S.%f')
             time_diff=ind_time_date-otp_file.creation
+            return time_diff
 
-            if '1:00:00.000000'>=str(time_diff):
-                user=frappe.get_doc("User",otp_file.user)
-                user.new_password=password
-                user.save(ignore_permissions=True)
+            # if '1:00:00.000000'>=str(time_diff):
+            #     user=frappe.get_doc("User",otp_file.user)
+            #     user.new_password=password
+            #     user.save(ignore_permissions=True)
 
-                return "Password Changed Successfully"
-                
-            else:
-                return "Your OTP has expired"
+            #     return "Password Changed Successfully"
+
+            # else:
+            #     return "Your OTP has expired"
 
     else:
         return "Incorrect OTP"
