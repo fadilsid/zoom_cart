@@ -45,7 +45,7 @@ def password_change(otp,password):
             bahrain_time=datetime.now(timezone("Asia/Bahrain")).strftime('%Y-%m-%d %H:%M:%S.%f')
             cur_time=datetime.now()
             bahrain_time_date=datetime.strptime(bahrain_time, '%Y-%m-%d %H:%M:%S.%f')
-            time_diff=otp_file.creation - bahrain_time_date
+            time_diff= otp_file.creation - bahrain_time_date
         
             return bahrain_time_date , otp_file.creation ,time_diff , cur_time
             # return time_diff
