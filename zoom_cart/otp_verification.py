@@ -25,7 +25,8 @@ def otp_verification(email):
         otp.otp=rand
         otp.insert()
 
-        content="Dear "+user_doc.first_name+","+'<br>' +"Your OTP to change password is " + rand
+        content="Hi "+user_doc.first_name+","+'<br>' +'<br>' +"Thank you for choosing ZoomCart.Use the following OTP to complete your Sign Up procedures. OTP is valid for 5 minutes " \
+        +'<br>''<br>'  + rand +'<br>' +"Regards," +'<br>' '<b>'+"ZoomCart"'<b>' 
         recipient=user_doc.email
         send_email=frappe.sendmail(recipients=[recipient],sender=user_doc.owner,subject="Zoom Cart OTP Verification",content=content,delayed = False)
 
@@ -82,6 +83,15 @@ def signup(email,name,password,redirect_to):
     
     new_user.insert()
     new_user.save(ignore_permissions=True)
+
+    customer_reg = frappe.get_doc({
+        "doctype" : "Customer" ,
+        "customer_name" : name ,
+        "customer_type" : "Individual" ,
+        "customer_group" : "All Customer Groups" ,
+        "territory" : "All Territories" ,
+        
+    })
 
     user_reg=frappe.get_doc('User',new_user.email)
 
