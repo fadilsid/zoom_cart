@@ -90,10 +90,22 @@ def signup(email,name,password,redirect_to):
         "customer_type" : "Individual" ,
         "customer_group" : "All Customer Groups" ,
         "territory" : "All Territories" ,
+        "email" : email
         
     })
+
     customer_reg.insert()
     customer_reg.save(ignore_permissions=True)
+
+    contact = frappe.new_doc("Contact")
+    contact.update({"first_name": name, "email_ids": [{"email_id": email, "is_primary": 1}]})
+    contact.append("links", dict(link_doctype="Customer", link_name=customer_reg.customer_name))
+    contact.flags.ignore_mandatory = True
+    contact.insert(ignore_permissions=True)
+
+    # customer_reg.insert()
+    # customer_reg.save(ignore_permissions=True)
+
     user_reg=frappe.get_doc('User',new_user.email)
 
     default_role = frappe.db.get_value("Portal Settings", None, "default_role")
